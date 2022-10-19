@@ -1,0 +1,9 @@
+version: 2.1
+
+description: >
+  Deploy your infrastructure via a CircleCI pipeline using the Terraform orb. Integrate Infrastructure-as-Code (IaC) to help provision and manage any cloud, infrastructure, or service of your choice.
+
+# This information will be displayed in the orb registry and is not mandatory.
+display:
+  home_url: "https://www.terraform.io/"
+  source_url: "https://github.com/CircleCI-Public/terraform-orb"

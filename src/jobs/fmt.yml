@@ -1,0 +1,56 @@
+description: >
+  Run terraform fmt
+
+parameters:
+  attach-workspace:
+    default: false
+    description: "Attach (CircleCI) workspace to job."
+    type: boolean
+  workspace-root:
+    default: "."
+    description: "Workspace root path that is either an absolute path or a path relative to the working directory. Defaults to '.' (the working directory)"
+    type: string
+  path:
+    type: "string"
+    description: "Path to the terraform module"
+    default: "."
+  checkout:
+    type: boolean
+    default: false
+    description: "Perform checkout as first step in job."
+  recursive:
+    type: "boolean"
+    description: "Process files in subdirectories"
+    default: false
+  tag:
+    description: "Specify the Terraform Docker image tag for the executor"
+    type: "string"
+    default: "1.0.0" # update commands/install when updating this
+  timeout:
+    description: "Configure a custom timeout limit"
+    type: "string"
+    default: "10m"
+  resource_class:
+    description: "Specify the resource class for Docker Executor"
+    type: "string"
+    default: "medium"
+
+executor:
+  name: default
+  tag: << parameters.tag >>
+  resource_class: << parameters.resource_class >>
+
+steps:
+  - when:
+      condition: << parameters.checkout >>
+      steps:
+        - checkout
+  - when:
+      condition: << parameters.attach-workspace >>
+      steps:
+        - attach_workspace:
+            at: << parameters.workspace-root >>
+  - fmt:
+      path: << parameters.path >>
+      recursive: << parameters.recursive >>
+      timeout: <<parameters.timeout>>

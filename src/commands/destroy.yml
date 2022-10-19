@@ -1,0 +1,51 @@
+description: |
+  Execute 'terraform destroy' on current state.
+
+parameters:
+  path:
+    type: "string"
+    description: "Path to the terraform module"
+    default: "."
+  var:
+    type: "string"
+    description: "Comma separated list of var to set, e.g. 'foo=bar,bas=foo'"
+    default: ""
+  var_file:
+    type: "string"
+    description: "Comma separated list of var file paths"
+    default: ""
+  workspace:
+    type: "string"
+    description: "Name of the terraform workspace"
+    default: ""
+  backend_config:
+    type: "string"
+    description: |
+      "Comma separated list of backend configs to set, e.g. 'foo=bar'"
+    default: ""
+  backend_config_file:
+    type: "string"
+    description: "Path to a backend config file"
+    default: ""
+  cli_config_file:
+    type: "string"
+    description: "Path to terraform cli config file"
+    default: ""
+  timeout:
+    description: Configure a custom timeout limit
+    type: string
+    default: 10m
+
+steps:
+  - run:
+      name: terraform destroy
+      no_output_timeout: <<parameters.timeout>>
+      environment:
+        TF_PARAM_PATH: << parameters.path >>
+        TF_PARAM_VAR: << parameters.var >>
+        TF_PARAM_VAR_FILE: << parameters.var_file >>
+        TF_PARAM_WORKSPACE: << parameters.workspace >>
+        TF_PARAM_BACKEND_CONFIG: << parameters.backend_config >>
+        TF_PARAM_BACKEND_CONFIG_FILE: << parameters.backend_config_file >>
+        TF_PARAM_CLI_CONFIG_FILE: << parameters.cli_config_file >>
+      command: <<include(scripts/destroy.sh)>>

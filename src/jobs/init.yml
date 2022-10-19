@@ -1,0 +1,56 @@
+description: >
+  Inits terraform directory
+
+parameters:
+  attach-workspace:
+    default: false
+    description: "Do cool stuff with workspaces"
+    type: boolean
+  workspace-root-dir:
+    default: "."
+    description: "circleci workspaces...not terraform"
+    type: string
+  path:
+    type: "string"
+    description: "Path to the terraform module"
+    default: "."
+  checkout:
+    type: boolean
+    default: false
+    description: "Perform checkout as first step in job."
+  cli_config_file:
+    type: "string"
+    description: "Path to terraform cli config file"
+    default: ""
+  tag:
+    description: "Specify the Terraform Docker image tag for the executor"
+    type: "string"
+    default: "1.0.0" # update commands/install when updating this
+  timeout:
+    description: "Configure a custom timeout limit"
+    type: "string"
+    default: "10m"
+  resource_class:
+    description: "Specify the resource class for Docker Executor"
+    type: "string"
+    default: "medium"
+
+executor:
+  name: default
+  tag: << parameters.tag >>
+  resource_class: << parameters.resource_class >>
+
+steps:
+  - when:
+      condition: << parameters.checkout >>
+      steps:
+        - checkout
+  - when:
+      condition: << parameters.attach-workspace >>
+      steps:
+        - attach_workspace:
+            at: << parameters.workspace-root-dir >>
+  - init:
+      path: << parameters.path >>
+      cli_config_file: << parameters.cli_config_file >>
+      timeout: <<parameters.timeout>>
