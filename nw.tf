@@ -1,6 +1,6 @@
 provider "aws" {
   region  = "ap-northeast-1"
-# profile = "yuta"
+#  profile = "yuta"
 }
 
 terraform {
@@ -11,8 +11,9 @@ terraform {
     }
   }
   backend "s3" {
-    bucket  = "tfcirclecitest"
+    bucket  = "vamdemic-circleci"
     region  = "ap-northeast-1"
+#    profile = "yuta"
     key     = "terraform.tfstate"
     encrypt = true
   }
@@ -20,7 +21,6 @@ terraform {
 
 resource "aws_vpc" "main" {
   cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
 
   tags = {
     Name = "circleci-test-vpc"
